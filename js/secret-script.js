@@ -280,6 +280,21 @@ document.addEventListener('DOMContentLoaded', () => {
         a.textContent = link.text;
         linksBox.appendChild(a);
     });
+
+    // Game button functionality
+    const gameButton = document.getElementById('launchGame');
+    if (gameButton) {
+        gameButton.addEventListener('click', () => {
+            // Play pop sound
+            popSound.play();
+            
+            // Launch game in new window
+            window.open('your-game-url.html', '_blank', 'width=500,height=600');
+            
+            // Add some confetti
+            fireCustomConfetti();
+        });
+    }
 });
 
 // Add a cool effect when clicking anywhere in the document
