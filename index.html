@@ -30,6 +30,18 @@
     🎵 Play Music
   </button>
 
+  <button id="hintButton" class="hint-btn">
+    💡 Need a Hint?
+  </button>
+
+  <!-- Add this new div for the hint message -->
+  <div id="hintMessage" class="hint-message">
+    <div class="hint-content">
+      <p>Type "awesome sauce" to reveal a secret! 🤫</p>
+      <button class="close-hint">✕</button>
+    </div>
+  </div>
+
   <div class="card">
     <div class="imgBox">
       <div class="bark"></div>
@@ -74,6 +86,23 @@
     let secretCode = '';
     const targetCode = 'awesome sauce';
     const clickSound = document.getElementById('clickSound');
+    const hintButton = document.getElementById('hintButton');
+    const hintMessage = document.getElementById('hintMessage');
+    const closeHintBtn = document.querySelector('.close-hint');
+
+    // Add hint button click handler
+    hintButton.addEventListener('click', () => {
+        hintMessage.classList.add('show');
+        clickSound.currentTime = 0;
+        clickSound.play().catch(error => console.log('Audio failed:', error));
+    });
+
+    // Close hint message
+    closeHintBtn.addEventListener('click', () => {
+        hintMessage.classList.remove('show');
+        clickSound.currentTime = 0;
+        clickSound.play().catch(error => console.log('Audio failed:', error));
+    });
 
     document.addEventListener('keypress', (event) => {
         // Play click sound
