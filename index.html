@@ -24,6 +24,8 @@
     Your browser does not support the audio element.
   </audio>
 
+  <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+
   <button id="musicButton" class="music-btn">
     🎵 Play Music
   </button>
@@ -58,7 +60,43 @@
     </div>
   </div>
 
+  <div class="loading-container">
+    <div class="loading-bar">
+        <div class="loading-progress"></div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script src="./script.js"></script>
+  
+  <!-- Add this script before the closing body tag -->
+  <script>
+    let secretCode = '';
+    const targetCode = 'awesome sauce';
+    const clickSound = document.getElementById('clickSound');
+
+    document.addEventListener('keypress', (event) => {
+        // Play click sound
+        clickSound.currentTime = 0; // Reset sound to start
+        clickSound.play().catch(function(error) {
+            console.log("Audio play failed:", error);
+        });
+
+        console.log('Key pressed:', event.key);  // Debug log
+        secretCode += event.key.toLowerCase();
+        console.log('Current secret code:', secretCode);  // Debug log
+        
+        // Keep only the last characters that could match the code
+        if (secretCode.length > targetCode.length) {
+            secretCode = secretCode.slice(-targetCode.length);
+        }
+        
+        // Check if the secret code matches
+        if (secretCode === targetCode) {
+            console.log('Secret code matched!');  // Debug log
+            window.location.href = './secret-page.html';
+        }
+    });
+  </script>
 </body>
 </html>
