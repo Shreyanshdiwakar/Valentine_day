@@ -4,6 +4,7 @@
 body {
 	font-family: 'Indie Flower', cursive !important;
   background: #FDE3A7;
+  background-image: url('../assets/images/bg.gif');
 	margin: 0px;
 	padding: 0px;
 }
