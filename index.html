@@ -69,7 +69,7 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
   <script src="./js/script.js"></script>
   
-  <!-- Add this script before the closing body tag -->
+  <!-- Secret code handler -->
   <script>
     let secretCode = '';
     const targetCode = 'awesome sauce';
@@ -77,14 +77,11 @@
 
     document.addEventListener('keypress', (event) => {
         // Play click sound
-        clickSound.currentTime = 0; // Reset sound to start
-        clickSound.play().catch(function(error) {
-            console.log("Audio play failed:", error);
-        });
+        clickSound.currentTime = 0;
+        clickSound.play().catch(error => console.log('Audio failed:', error));
 
-        console.log('Key pressed:', event.key);  // Debug log
+        // Add the pressed key to the secret code
         secretCode += event.key.toLowerCase();
-        console.log('Current secret code:', secretCode);  // Debug log
         
         // Keep only the last characters that could match the code
         if (secretCode.length > targetCode.length) {
@@ -93,8 +90,8 @@
         
         // Check if the secret code matches
         if (secretCode === targetCode) {
-            console.log('Secret code matched!');  // Debug log
-            window.location.href = './secret-page.html';
+            console.log('Secret code matched!');
+            window.location.href = 'secret-note.html';
         }
     });
   </script>
