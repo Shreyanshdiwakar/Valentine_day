@@ -2,7 +2,7 @@
 
 A romantic interactive web experience featuring a Valentine's card, secret codes, a retro-style museum, and mini-games. Built with pure HTML, CSS, and JavaScript.
 
-[Live Demo](https://shreyanshdiwakar.github.io/Valentine_day/)  
+[Live Demo](https://shreyanshdiwakar.github.io/awesome-sauce-valentine/)  
 [GitHub Repository](https://github.com/Shreyanshdiwakar/awesome-sauce-valentine)
 
 ## 🔗 Repository
