@@ -7,81 +7,74 @@
     <link rel="stylesheet" href="css/secret-styles.css">
 </head>
 <body>
-    <div class="retro-container">
-        <header class="retro-header">
-            <h1 class="glitch-text">priyanshi.secret.museum ✧ 💝</h1>
-            <nav class="retro-nav">
-                <a href="#" class="nav-item">home</a>
-                <a href="#" class="nav-item">memories</a>
-                <a href="#" class="nav-item">about us</a>
-                <a href="#" class="nav-item">gallery</a>
-            </nav>
-        </header>
-
-        <div class="content-grid">
-            <div class="grid-item main-content">
-                <h2 class="section-title">our.collection.01</h2>
-                <div class="pixel-box">
-                    <img src="assets/images/secretbg.gif" alt="Secret Background" class="main-image">
-                </div>
-                <div class="image-info">
-                    <p class="info-item">location: our special place</p>
-                    <p class="info-item">date: valentine's day 2024</p>
-                    <p class="info-item">type: love collection</p>
-                </div>
-            </div>
-            
-            <div class="side-content">
-                <div class="grid-item status-box">
-                    <h3 class="box-title">status</h3>
-                    <p class="status-item">now viewing: secret valentine</p>
-                    <p class="status-item">visitor: awesome sauce</p>
-                    <p class="status-item">mood: in love 💖</p>
-                    <p class="status-item">weather: raining hearts</p>
-                    <p class="timestamp">last updated: now</p>
-                </div>
-
-                <div class="grid-item info-box">
-                    <h3 class="box-title">about us</h3>
-                    <p class="info-text">A digital love story</p>
-                    <p class="info-text">starring: Priyanshi & Shreyansh</p>
-                    <p class="info-text">✧ awesome sauce</p>
-                    <p class="info-text">✧ forever</p>
-                    <p class="info-text">✧ together</p>
-                </div>
-
-                <div class="grid-item message-box">
-                    <h3 class="box-title">secret message</h3>
-                    <div class="typing-container">
-                        <p class="typing-text">Dear Priyanshi,</p>
-                        <p class="typing-text">You found our secret place!</p>
-                        <p class="typing-text">You're my awesome sauce ❤️</p>
-                    </div>
-                </div>
-
-                <div class="grid-item links-box">
-                    <h3 class="box-title">quick links</h3>
-                    <a href="#" class="link-item">→ our memories</a>
-                    <a href="#" class="link-item">→ photo gallery</a>
-                    <a href="#" class="link-item">→ love letters</a>
-                </div>
-
-                <div class="grid-item game-box" style="text-align: center; padding: 1rem; margin-top: 1rem; background: #111; border: 1px solid #333;">
-                    <h3 class="box-title">play with me ♥</h3>
-                    <button id="launchGame" style="background: #ff69b4; border: 3px solid #fff; color: white; padding: 10px 20px; font-family: 'VT323', monospace; font-size: 1.2rem; cursor: pointer; text-transform: lowercase; box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);">
-                        <span style="display: inline-block; margin: 0 5px;">♥</span>
-                        launch love game
-                        <span style="display: inline-block; margin: 0 5px;">♥</span>
-                    </button>
-                </div>
-            </div>
+    <!-- Desktop Icons -->
+    <div class="desktop-icons">
+        <div class="desktop-icon" data-window="memories">
+            <img src="assets/icons/folder.png" alt="Memories">
+            <span>Memories</span>
+        </div>
+        <div class="desktop-icon" data-window="letters">
+            <img src="assets/icons/letter.png" alt="Letters">
+            <span>Letters</span>
+        </div>
+        <div class="desktop-icon" data-window="photos">
+            <img src="assets/icons/photo.png" alt="Photos">
+            <span>Photos</span>
+        </div>
+        <div class="desktop-icon" data-window="videos">
+            <img src="assets/icons/video.png" alt="Videos">
+            <span>Videos</span>
         </div>
     </div>
 
-    <!-- Animation Libraries -->
+    <!-- Windows Container -->
+    <div id="windows-container"></div>
+
+    <!-- Taskbar -->
+    <div class="taskbar">
+        <div class="start-button">
+            <img src="assets/icons/heart-pixel.png" alt="Start">
+        </div>
+        <div class="taskbar-items"></div>
+        <div class="clock"></div>
+    </div>
+
+    <!-- Window Template -->
+    <template id="window-template">
+        <div class="window" data-window-id="">
+            <div class="window-titlebar">
+                <div class="window-controls">
+                    <button class="close">●</button>
+                    <button class="minimize">●</button>
+                    <button class="maximize">●</button>
+                </div>
+                <div class="window-title"></div>
+                <div class="window-actions">
+                    <input type="text" class="search-bar" placeholder="Search...">
+                    <button class="view-options">⋮</button>
+                </div>
+            </div>
+            <div class="window-toolbar">
+                <button class="toolbar-btn">◀</button>
+                <button class="toolbar-btn">▶</button>
+                <div class="toolbar-separator"></div>
+                <button class="toolbar-btn">📁</button>
+                <button class="toolbar-btn">📋</button>
+                <button class="toolbar-btn">🔍</button>
+            </div>
+            <div class="window-content"></div>
+            <div class="resize-handle"></div>
+        </div>
+    </template>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
     <script src="js/secret-script.js"></script>
 </body>
 </html>

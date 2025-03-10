@@ -319,4 +319,206 @@ document.addEventListener('click', (e) => {
         ease: "power2.out",
         onComplete: () => ripple.remove()
     });
-}); 
+});
+
+// Window Management System
+const windowManager = {
+    activeWindows: new Set(),
+    zIndex: 1000,
+
+    createWindow(type) {
+        const template = document.querySelector('#window-template');
+        const window = template.content.cloneNode(true).querySelector('.window');
+        
+        window.dataset.windowId = type;
+        window.querySelector('.window-title').textContent = type.charAt(0).toUpperCase() + type.slice(1);
+        
+        // Set initial position
+        window.style.left = '100px';
+        window.style.top = '100px';
+        window.style.zIndex = ++this.zIndex;
+
+        const content = window.querySelector('.window-content');
+        this.loadContent(type, content);
+
+        document.getElementById('windows-container').appendChild(window);
+        this.activeWindows.add(type);
+        this.updateTaskbar();
+
+        // Initialize jQuery UI draggable
+        $(window).draggable({
+            handle: '.window-titlebar',
+            start: function() {
+                $(this).css('z-index', ++windowManager.zIndex);
+            }
+        }).resizable();
+        
+        return window;
+    },
+
+    loadContent(type, container) {
+        switch(type) {
+            case 'memories':
+                container.innerHTML = `
+                    <div class="memories-grid">
+                        <div class="memory-item">
+                            <img src="assets/memories/memory1.jpg" alt="Memory 1">
+                            <p>Our first date ❤️</p>
+                        </div>
+                    </div>
+                `;
+                break;
+
+            case 'letters':
+                container.innerHTML = `
+                    <div class="letter-content">
+                        <h3>Dear Priyanshi,</h3>
+                        <p>This is a love letter just for you...</p>
+                        <button class="add-letter-btn">
+                            <span>✏️</span>
+                            <span>New Letter</span>
+                        </button>
+                    </div>
+                `;
+                
+                // Add letter button functionality
+                const addLetterBtn = container.querySelector('.add-letter-btn');
+                addLetterBtn.addEventListener('click', () => {
+                    const newLetter = document.createElement('div');
+                    newLetter.className = 'letter-content';
+                    newLetter.innerHTML = `
+                        <textarea placeholder="Write your letter here..."
+                                  style="width: 100%; height: 200px; 
+                                         background: #3c3c3c; color: white; 
+                                         border: 1px solid #4c4c4c; 
+                                         padding: 10px; border-radius: 4px;">
+                        </textarea>
+                    `;
+                    container.appendChild(newLetter);
+                });
+                break;
+
+            case 'photos':
+                container.innerHTML = `
+                    <div class="photo-gallery">
+                        <div class="upload-section">
+                            <input type="file" accept="image/*" multiple id="photoUpload">
+                            <label for="photoUpload">📸 Add Photos</label>
+                        </div>
+                        <div class="photo-grid">
+                            <!-- Photos will be added here -->
+                        </div>
+                    </div>
+                `;
+                
+                // Handle photo uploads
+                const photoUpload = container.querySelector('#photoUpload');
+                photoUpload.addEventListener('change', (e) => {
+                    const files = e.target.files;
+                    const photoGrid = container.querySelector('.photo-grid');
+                    
+                    for (let file of files) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const photoItem = document.createElement('div');
+                            photoItem.className = 'photo-item';
+                            photoItem.innerHTML = `
+                                <img src="${e.target.result}" alt="Uploaded photo">
+                            `;
+                            photoGrid.appendChild(photoItem);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+                break;
+
+            case 'videos':
+                container.innerHTML = `
+                    <div class="video-list">
+                        <div class="upload-section">
+                            <input type="file" accept="video/*" multiple id="videoUpload">
+                            <label for="videoUpload">🎥 Add Videos</label>
+                        </div>
+                        <div class="video-grid">
+                            <!-- Videos will be added here -->
+                        </div>
+                    </div>
+                `;
+                
+                // Handle video uploads
+                const videoUpload = container.querySelector('#videoUpload');
+                videoUpload.addEventListener('change', (e) => {
+                    const files = e.target.files;
+                    const videoGrid = container.querySelector('.video-grid');
+                    
+                    for (let file of files) {
+                        const videoItem = document.createElement('div');
+                        videoItem.className = 'video-item';
+                        videoItem.innerHTML = `
+                            <video controls>
+                                <source src="${URL.createObjectURL(file)}" type="${file.type}">
+                            </video>
+                        `;
+                        videoGrid.appendChild(videoItem);
+                    }
+                });
+                break;
+        }
+    },
+
+    updateTaskbar() {
+        const taskbarItems = document.querySelector('.taskbar-items');
+        taskbarItems.innerHTML = '';
+        
+        this.activeWindows.forEach(windowId => {
+            const button = document.createElement('button');
+            button.textContent = windowId;
+            button.onclick = () => this.toggleWindow(windowId);
+            taskbarItems.appendChild(button);
+        });
+    },
+
+    toggleWindow(windowId) {
+        const window = document.querySelector(`.window[data-window-id="${windowId}"]`);
+        if (window.classList.contains('minimized')) {
+            window.classList.remove('minimized');
+        } else {
+            window.classList.add('minimized');
+        }
+    }
+};
+
+// Desktop Icons Click Handler
+document.querySelectorAll('.desktop-icon').forEach(icon => {
+    icon.addEventListener('click', () => {
+        const windowType = icon.dataset.window;
+        windowManager.createWindow(windowType);
+    });
+});
+
+// Window Controls
+document.addEventListener('click', (e) => {
+    if (e.target.matches('.window-controls .close')) {
+        const window = e.target.closest('.window');
+        const windowId = window.dataset.windowId;
+        windowManager.activeWindows.delete(windowId);
+        window.remove();
+        windowManager.updateTaskbar();
+    } else if (e.target.matches('.window-controls .minimize')) {
+        const window = e.target.closest('.window');
+        window.classList.add('minimized');
+    } else if (e.target.matches('.window-controls .maximize')) {
+        const window = e.target.closest('.window');
+        window.classList.toggle('maximized');
+    }
+});
+
+// Clock Update
+function updateClock() {
+    const clock = document.querySelector('.clock');
+    const now = new Date();
+    clock.textContent = now.toLocaleTimeString();
+}
+
+setInterval(updateClock, 1000);
+updateClock(); 
